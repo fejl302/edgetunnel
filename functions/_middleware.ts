@@ -1,14 +1,8 @@
 export const onRequest = async ({ request, next }) => {
-  const host = new URL(request.url).hostname;
+  const host = request.headers.get("host");
 
-  // 拦截 pages.dev 域名
-  if (host.endsWith("pages.dev")) {
-    return new Response("Access Denied", {
-      status: 403,
-      headers: {
-        "content-type": "text/plain"
-      }
-    });
+  if (host && host.endsWith("pages.dev")) {
+    return new Response("Not Allowed", { status: 403 });
   }
 
   return next();
